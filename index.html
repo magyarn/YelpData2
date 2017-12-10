@@ -2,29 +2,64 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <title></title>
   </head>
   <body>
-    <h3>Most Common Cuisines in Ann Arbor:</h3>
-    <ul id="cuisineList"></ul>
-    
-    <h3>Most Highly Rated Cuisines in Ann Arbor:</h3>
-    <ul id="cuisineRatingList"></ul>
-    
-    <h3>Number of Restaurants by Zipcode:</h3>
-    <ul id="restaurantsZipcodeList"></ul>
-    
-    <h3>Ratings by Zipcode:</h3>
-    <ul id="zipcodeRatingList"></ul>
-    
-    <h3>Number of Restaurants by Price:</h3>
-    <ul id="restaurantsPriceList"></ul>
-    
-    <h3>Ratings by Price:</h3>
-    <ul id="ratingsByPriceList"></ul>
-    
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="js/data.js"></script>
+    <header>
+      <a href="#" class="hidden">PREVIOUS</a>
+      <h1>A2eatZ</h1>
+      <a href="map.html">START</a>
+    </header>
+    <div class="container">
+      <section class="subtitle">
+        <h3 class="flex-center">Thinking of starting a restaurant in Ann Arbor?</h3>
+      </section>
+      <section class="cities">
+        <div class="city">
+          <h3>1.</h3>
+          <div class="card">
+            <a class="part" href="map.html">
+              <div class="city-img annarbor">
+              </div>
+              <h4>Get a lay of the land</h4>
+            </a>
+            <p>Learn what parts of Ann Arbor are most and least
+              densely populated with restaurants, what types of food
+              those restaurants serve, and how they're performing.
+            </p>
+          </div>
+        </div>
+        <div class="city">
+          <h3>2.</h3>
+          <div class="card">
+            <a class="part" href="burst.html">
+              <div class="city-img lansing">
+              </div>
+              <h4>Check out what your slice of the pie will be</h4>
+            </a>
+            <p>Get a better idea of which cuisine types are
+              most and least common in Ann Arbor, and what price 
+              ranges they usually fall under.
+            </p>
+          </div>
+        </div>
+        <div class="city">
+          <h3>3.</h3>
+          <div class="card">
+            <a class="part" href="bars.html">
+              <div class="city-img kalamazoo">
+              </div>
+              <h4>Already own a restaurant? Compare with competitors.</h4>
+            </a>
+            <p>View a specific restaurant's rankings among it's competitors 
+              (restaurants who serve similar cuisine and have similar prices).
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
   </body>
 </html>
 

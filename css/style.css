@@ -1,0 +1,123 @@
+* {
+  box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  font-family: 'Open Sans', sans-serif; }
+
+a {
+  text-decoration: none;
+  color: black; }
+
+.hidden {
+  opacity: 0; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  background-color: #2794E5;
+  color: white; }
+  header h1 {
+    margin: 0;
+    padding: 2rem 0; }
+  header a {
+    color: white;
+    padding: .5rem;
+    border: 2px solid white;
+    border-radius: 3px;
+    transition: .5s all;
+    width: 100px;
+    text-align: center;
+    box-sizing: content-box; }
+    header a:hover {
+      color: #2794E5;
+      background-color: white;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3); }
+
+.container {
+  width: 75%;
+  margin: 0 auto; }
+
+.flex-center, .cities {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.cities {
+  width: 100%; }
+
+.city {
+  width: 33%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column; }
+  .city .card {
+    margin: 2rem 1.5rem;
+    padding: 2rem;
+    box-sizing: border-box;
+    border: 1px solid #f0f0f0;
+    border-radius: 3px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+    flex-direction: column; }
+    .city .card .part {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column; }
+      .city .card .part h4 {
+        text-align: center; }
+    .city .card p {
+      font-size: .8rem; }
+
+.city-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .city-img a {
+    color: white;
+    opacity: 0;
+    text-decoration: none;
+    transition: color 2s; }
+  .city-img.annarbor {
+    background-image: url("../images/map.jpg");
+    background-size: cover; }
+  .city-img.lansing {
+    background-image: url("../images/pie.png");
+    background-size: cover; }
+  .city-img.kalamazoo {
+    background-image: url("../images/kalamazoo.jpeg");
+    background-size: cover; }
+  .city-img:hover {
+    cursor: pointer; }
+    .city-img:hover a {
+      opacity: 1; }
+
+.map {
+  background-image: url(../images/map.jpg);
+  width: 100%;
+  height: 500px; }
+
+.subtitle {
+  padding: 2rem 0; }
+
+.viz {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5rem; }
+  .viz .info {
+    padding-left: 2rem; }
+
+/*# sourceMappingURL=style.css.map */
