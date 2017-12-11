@@ -1,7 +1,7 @@
 
 var width = 500,
     height = 500,
-    radius = (Math.min(width, height) / 2) - 10;
+    radius = 300;
 
 var formatNumber = d3.format(",d");
 
@@ -12,7 +12,7 @@ var y = d3.scale.sqrt()
     .range([0, radius]);
 
 var body = d3.select("body"),
-    length = 800,
+    length = 400,
     color = d3.scale.linear().domain([1,length])
       .interpolate(d3.interpolateHcl)
       .range([d3.rgb("#000775"), d3.rgb('#00ACB8')]);
@@ -24,8 +24,22 @@ var partition = d3.layout.partition()
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
     .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-    .innerRadius(function(d) { return Math.max(0, y(d.y)); })
-    .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+    .innerRadius(function(d) {
+      if (d.depth < 3) {
+      return radius * (d.y)*(d.y);
+      }
+      else if (d.depth === 3) {
+        return radius * (d.y)*(d.y)
+      }
+    })
+    .outerRadius(function(d) {
+      if (d.depth < 3) {
+      return radius * (d.y + d.dy)*(d.y + d.dy);
+      }
+    else if (d.depth === 3) {
+      return radius * (d.y + (d.rating/50) + .01)*(d.y + (d.rating/50) + .01);
+    }}
+    );
 
 var svg = d3.select("#sunburst").append("svg")
     .attr("width", width)
@@ -40,6 +54,8 @@ var tooltip = d3.select("body")
    .style("z-index", "10")
    .style("opacity", 0);
 
+var tags = document.getElementById("tags");
+
 
 d3.json("js/AAflare.json", function(error, root) {
   if (error) throw error;
@@ -51,74 +67,192 @@ d3.json("js/AAflare.json", function(error, root) {
     .enter().append("path")
       .attr("d", arc)
       .style("fill", function(d,i) {
-        console.log(d);
-        return color(i)
-    //     if(d.depth==3){
-    //     return color(10);
-    //   }
-    //   else if(d.depth==2){
-    //   return color(4);
-    // }
-    //   else if (d.depth === 1){
-    //     if (colorSwitch === 0) {
-    //       colorSwitch = 1;
-    //       return "#000000";
-    //     }
-    //     else {
-    //       colorSwitch = 0;
-    //       return "#92278f";
-    //     }
-    //   }
-    })
+      if (d.depth === 1){
+        return "#2794E5"
+      }
+      else if (d.depth === 2){
+        if (d.name === "$") {
+          return "#31a354"
+        }
+        else if (d.name === "$$") {
+          return "#78c769"
+        }
+        else if (d.name === "$$$") {
+          return "#c2e699"
+        }
+        else if (d.name === "$$$$") {
+          return "#f7fcb9"
+        }
+      }
+      else if (d.depth === 3){
+        if (d.parent.name === "$") {
+          return "#31a354"
+        }
+        else if (d.parent.name === "$$") {
+          return "#78c769"
+        }
+        else if (d.parent.name === "$$$") {
+          return "#c2e699"
+        }
+        else if (d.parent.name === "$$$$") {
+          return "#f7fcb9"
+        }
+      }
+
+      }
+    )
       .style({"stroke": "black", "stroke-width": .5})
       .on("click", click)
       .on("mouseover", function(d) {
           var name = d.name
           tooltip.style("display", "block")
           if (d.depth === 2) {
+            var cuisineTag = document.getElementById("cuisineTag");
+            var priceTag = document.getElementById("priceTag");
+            cuisineTag.innerHTML = d.parent.name;
+            priceTag.innerHTML = d.name;
+            cuisineTag.classList.add("burstTag");
+            priceTag.classList.add("burstTag");
             tooltip.html(d.parent.name + ": " + name)
+
+            if (d.name === "$") {
+              priceTag.style.backgroundColor = "#31a354";
+              priceTag.style.color = "#ffffff";
+            }
+            else if (d.name === "$$") {
+              priceTag.style.backgroundColor = "#78c769";
+              priceTag.style.color = "#ffffff";
+            }
+            else if (d.name === "$$$") {
+              priceTag.style.backgroundColor = "#c2e699";
+              priceTag.style.color = "#ffffff";
+            }
+            else if (d.name === "$$$$") {
+              priceTag.style.backgroundColor = "#f7fcb9";
+              priceTag.style.color = "#000000";
+            }
+
+
           }
           else if (d.depth === 3){
-            tooltip.html(name + `<p>Rating: ${d.rating}</p><p>${d.parent.parent.name}: ${d.parent.name}</p>`)
+            var cuisineTag = document.getElementById("cuisineTag");
+            var priceTag = document.getElementById("priceTag");
+            var restaurantTag = document.getElementById("restaurantTag");
+            var ratingTag = document.getElementById("ratingTag");
+            cuisineTag.innerHTML = d.parent.parent.name;
+            priceTag.innerHTML = d.parent.name;
+            restaurantTag.innerHTML = d.name;
+            ratingTag.innerHTML = d.rating;
+            cuisineTag.className = "burstTag";
+            priceTag.className = "burstTag";
+            restaurantTag.className = "burstTag";
+            ratingTag.className = "burstTag";
+            tooltip.html(name + `<p>Rating: ${d.rating} stars</p>`)
+
+            if (d.parent.name === "$") {
+              priceTag.style.backgroundColor = "#31a354";
+              restaurantTag.style.backgroundColor = "#31a354";
+              ratingTag.style.backgroundColor = "#31a354";
+              priceTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#ffffff";
+              ratingTag.style.color = "#ffffff";
+            }
+            else if (d.parent.name === "$$") {
+              priceTag.style.backgroundColor = "#78c769";
+              restaurantTag.style.backgroundColor = "#78c769";
+              ratingTag.style.backgroundColor = "#78c769";
+              priceTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#ffffff";
+              ratingTag.style.color = "#ffffff";
+            }
+            else if (d.parent.name === "$$$") {
+              priceTag.style.backgroundColor = "#c2e699";
+              restaurantTag.style.backgroundColor = "#c2e699";
+              ratingTag.style.backgroundColor = "#c2e699";
+              priceTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#ffffff";
+              ratingTag.style.color = "#ffffff";
+            }
+            else if (d.parent.name === "$$$$") {
+              priceTag.style.backgroundColor = "#f7fcb9";
+              restaurantTag.style.backgroundColor = "#f7fcb9";
+              ratingTag.style.backgroundColor = "#f7fcb9";
+              priceTag.style.color = "#000000";
+              restaurantTag.style.color = "#000000";
+              ratingTag.style.color = "#000000";
+            }
+
+
           }
-          else {
+          else if (d.depth === 1) {
+            var cuisineTag = document.getElementById("cuisineTag");
+            cuisineTag.innerHTML = d.name;
+            cuisineTag.className = "burstTag";
             tooltip.html(name)
+
           }
-          tooltip.attr("class", "burstTooltip");
-          return tooltip.transition()
-            .duration(50)
-            .style("opacity", 0.9);
+          // tooltip.attr("class", "burstTooltip");
+          // return tooltip.transition()
+          //   .duration(50)
+          //   .style("opacity", 0.9);
+
+
+          // Fade all the segments.
+          //
+          // svg.selectAll("path")
+          //     .style("opacity", 0.3);
+          //
+          // // Then highlight only those that are an ancestor of the current segment.
+          // svg.selectAll("path")
+          //     .filter(function(node) {
+          //               return (node);
+          //             })
+          //     .style("opacity", 1);
         })
         .on("mousemove", function(d) {
           return tooltip
             .style("top", (d3.event.pageY-10)+"px")
             .style("left", (d3.event.pageX+10)+"px");
         })
-        .on("mouseout", function(){return tooltip.style("display", "none");});
+        .on("mouseout", function(){
+          var cuisineTag = document.getElementById("cuisineTag");
+          var priceTag = document.getElementById("priceTag");
+          var restaurantTag = document.getElementById("restaurantTag");
+          cuisineTag.innerHTML = '';
+          priceTag.innerHTML = '';
+          restaurantTag.innerHTML = '';
+          ratingTag.innerHTML = '';
+          cuisineTag.classList.remove("burstTag");
+          priceTag.classList.remove("burstTag");
+          restaurantTag.classList.remove("burstTag");
+          ratingTag.classList.remove("burstTag");
+          return tooltip.style("display", "none");
+        });
+
 });
 
 
 
 function click(d) {
   console.log(d);
-  if (d.depth === 1) {
-    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.name;
-  }
-  else if (d.depth === 2) {
-    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.name;
-    document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.name;
-  }
-  else if (d.depth === 3) {
-    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.parent.name;
-    document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.parent.name;
-  }
-  else if (d.depth === 0) {
-    document.getElementById("selectedCuisine").innerHTML = "Cuisine: <em>Not selected</em>";
-    document.getElementById("selectedPrice").innerHTML = "Price Range: <em>Not selected</em>";
-  }
-  else if (d.parent.depth === 0) {
-    document.getElementById("selectedPrice").innerHTML = "Price Range: <em>Not selected</em>";
-  }
+  // if (d.depth === 1) {
+  //   const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.name;
+  // }
+  // else if (d.depth === 2) {
+  //   const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.name;
+  //   document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.name;
+  // }
+  // else if (d.depth === 3) {
+  //   const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.parent.name;
+  //   document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.parent.name;
+  // }
+  // else if (d.depth === 0) {
+  //   document.getElementById("selectedCuisine").innerHTML = "Cuisine: <em>Not selected</em>";
+  //   document.getElementById("selectedPrice").innerHTML = "Price Range: <em>Not selected</em>";
+  // }
+  // else if (d.parent.depth === 0) {
+  //   document.getElementById("selectedPrice").innerHTML = "Price Range: <em>Not selected</em>";
+  // }
   svg.transition()
       .duration(750)
       .tween("scale", function() {

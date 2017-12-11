@@ -117,18 +117,21 @@ header {
 
 .viz {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 5rem; }
-  .viz .info {
-    padding-left: 2rem; }
+  justify-content: center; }
+
+#tags {
+  width: 33%; }
 
 .burstTag {
   padding: 1rem;
-  width: 150px;
+  min-width: 150px;
   background-color: #2794E5;
   color: white;
-  border-radius: 3px; }
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem; }
 
 .burstTooltip {
   width: 150px;
@@ -139,5 +142,49 @@ header {
   border-radius: 3px;
   font-size: .8rem;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
+
+#legend, .priceLegend, .ratingLegend {
+  display: flex; }
+
+#legend {
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 3px; }
+
+.cuisineLegend {
+  margin-right: 1rem; }
+
+.colorSwatch {
+  width: 20px;
+  height: 20px; }
+
+.priceThing {
+  margin: .5rem; }
+
+#burstCuisine {
+  background-color: #2794E5; }
+
+#burstd1 {
+  background-color: #31a354; }
+
+#burstd2 {
+  background-color: #78c769; }
+
+#burstd3 {
+  background-color: #c2e699; }
+
+#burstd4 {
+  background-color: #f7fcb9; }
+
+#smallLength {
+  height: 20px;
+  width: 10px;
+  background-color: #31a354; }
+
+#largeLength {
+  height: 20px;
+  width: 50px;
+  background-color: #31a354; }
 
 /*# sourceMappingURL=style.css.map */
