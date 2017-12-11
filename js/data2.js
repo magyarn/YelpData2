@@ -19,7 +19,6 @@ var body = d3.select("body"),
 
 
 var partition = d3.layout.partition()
-    .size(4)
     .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
