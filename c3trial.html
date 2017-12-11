@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+</head>
+<body>
+  <select name="cuisines" id="cuisines">
+    <option value="all">All</option>
+  </select>
+  <div id="chart"></div>
+  <script>
+  $.getJSON("js/AArestaurantsmini.json", function(data) {
+    let sortedRestaurants = data.sort((a,b) => b.rating - a.rating);
+    let restaurantNames = sortedRestaurants.map(d => d.name);
+    let restaurantRatings = sortedRestaurants.map(d => d.rating);
+    let cuisines = [];
+
+    data.forEach(function(d){
+      if (d.categories) {
+        d.categories.forEach(function(c){
+          if (!cuisines.includes(c.title)) {
+            cuisines.push(c.title);
+          }
+        })
+      }
+    })
+
+    const sortedCuisines = cuisines.sort();
+    const cuisineFilter = document.getElementById("cuisines");
+    sortedCuisines.forEach(function(c) {
+      const newC = document.createElement("option");
+      newC.innerHTML = "<option value=" + c + ">"+ c + "</option>";
+      cuisineFilter.appendChild(newC);
+    })
+
+    var chart = c3.generate({
+      data: {
+          selection: {
+            enabled: true
+          },
+          columns: [restaurantRatings],
+          type: 'bar'
+      },
+      bar: {
+          width: {
+              ratio: 0.5
+      }},
+        axis: {
+          x: {
+            type: 'category',
+            categories: restaurantNames,
+            tick: {
+              rotate: 45,
+              multiline: false
+            }
+          }
+        }
+    });
+
+    cuisineFilter.onchange = function(e) {
+      console.log(e.target.value)
+    };
+
+
+  });
+  </script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+
 var width = 500,
     height = 500,
     radius = (Math.min(width, height) / 2) - 10;
@@ -18,6 +19,7 @@ var body = d3.select("body"),
 
 
 var partition = d3.layout.partition()
+    .size(4)
     .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
@@ -32,18 +34,68 @@ var svg = d3.select("#sunburst").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
+var tooltip = d3.select("body")
+   .append("div")
+   .attr("class", "tooltip")
+   .style("position", "absolute")
+   .style("z-index", "10")
+   .style("opacity", 0);
+
+
 d3.json("js/AAflare.json", function(error, root) {
   if (error) throw error;
+
+  let colorSwitch = 0;
 
   svg.selectAll("path")
       .data(partition.nodes(root))
     .enter().append("path")
       .attr("d", arc)
-      .style("fill", function(d,i) { return color(i); })
+      .style("fill", function(d,i) {
+        console.log(d);
+        return color(i)
+    //     if(d.depth==3){
+    //     return color(10);
+    //   }
+    //   else if(d.depth==2){
+    //   return color(4);
+    // }
+    //   else if (d.depth === 1){
+    //     if (colorSwitch === 0) {
+    //       colorSwitch = 1;
+    //       return "#000000";
+    //     }
+    //     else {
+    //       colorSwitch = 0;
+    //       return "#92278f";
+    //     }
+    //   }
+    })
       .style({"stroke": "black", "stroke-width": .5})
       .on("click", click)
-    .append("title")
-      .text(function(d) { return d.children ? d.name + "\n" + formatNumber(d.value) : d.name});
+      .on("mouseover", function(d) {
+          var name = d.name
+          tooltip.style("display", "block")
+          if (d.depth === 2) {
+            tooltip.html(d.parent.name + ": " + name)
+          }
+          else if (d.depth === 3){
+            tooltip.html(name + `<p>Rating: ${d.rating}</p><p>${d.parent.parent.name}: ${d.parent.name}</p>`)
+          }
+          else {
+            tooltip.html(name)
+          }
+          tooltip.attr("class", "burstTooltip");
+          return tooltip.transition()
+            .duration(50)
+            .style("opacity", 0.9);
+        })
+        .on("mousemove", function(d) {
+          return tooltip
+            .style("top", (d3.event.pageY-10)+"px")
+            .style("left", (d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(){return tooltip.style("display", "none");});
 });
 
 
@@ -51,11 +103,15 @@ d3.json("js/AAflare.json", function(error, root) {
 function click(d) {
   console.log(d);
   if (d.depth === 1) {
-    document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.name;
+    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.name;
   }
   else if (d.depth === 2) {
-    document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.name;
+    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.name;
     document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.name;
+  }
+  else if (d.depth === 3) {
+    const cuisineTag = document.getElementById("selectedCuisine").innerHTML = "Cuisine: " + d.parent.parent.name;
+    document.getElementById("selectedPrice").innerHTML = "Price Range: " + d.parent.name;
   }
   else if (d.depth === 0) {
     document.getElementById("selectedCuisine").innerHTML = "Cuisine: <em>Not selected</em>";
@@ -74,7 +130,7 @@ function click(d) {
       })
     .selectAll("path")
       .attrTween("d", function(d) { return function() { return arc(d); }; })
-      
+
 }
 
 d3.select(self.frameElement).style("height", height + "px");

@@ -14,6 +14,9 @@ a {
 .hidden {
   opacity: 0; }
 
+.hidden2 {
+  display: none; }
+
 header {
   display: flex;
   justify-content: space-between;
@@ -119,5 +122,22 @@ header {
   padding-top: 5rem; }
   .viz .info {
     padding-left: 2rem; }
+
+.burstTag {
+  padding: 1rem;
+  width: 150px;
+  background-color: #2794E5;
+  color: white;
+  border-radius: 3px; }
+
+.burstTooltip {
+  width: 150px;
+  background: white;
+  opacity: 1;
+  padding: .5rem;
+  border: 1px solid #f0f0f0;
+  border-radius: 3px;
+  font-size: .8rem;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
 
 /*# sourceMappingURL=style.css.map */

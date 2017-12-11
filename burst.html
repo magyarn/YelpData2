@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <title></title>
   </head>
   <body>
@@ -18,22 +19,21 @@
         <h1>Slice of the Pie</h1>
         <p>The chart below represents all of the restaurants in Ann Arbor, broken
           up in various ways from the center moving outwards. The center circle
-          represents the total number of restaurants for Ann Arbor, to start. The 
-          next innermost ring displays the types of cuisines, with longer rings 
-          indicating a greater quantity of restaurants in that cuisine category. 
-          At the next level out, each cuisine is broken up by price, from low ($) 
-          to high ($$$$). The outermost ring is comprised of individual restaurants 
-          within that cuisine and price range. Hover over a section to learn more about 
+          represents the total number of restaurants for Ann Arbor, to start. The
+          next innermost ring displays the types of cuisines, with longer rings
+          indicating a greater quantity of restaurants in that cuisine category.
+          At the next level out, each cuisine is broken up by price, from low ($)
+          to high ($$$$). The outermost ring is comprised of individual restaurants
+          within that cuisine and price range. Hover over a section to learn more about
           it (please be patient though, the tooltip doesn't show up quickly...sorry).
         </p>
         <section class="viz">
           <section id="sunburst">
-            
+
           </section>
           <section class="info">
-            <p id="selectedCity">City: Ann Arbor</p>
-            <p id="selectedCuisine">Cuisine: <em>Not selected</em></p>
-            <p id="selectedPrice">Price Range: <em>Not selected</em></p>
+            <p class="burstTag" id="selectedCuisine">Cuisine: <em>Not selected</em></p>
+            <p class="burstTag" id="selectedPrice">Price Range: </em>Not selected</em></p>
           </section>
         </section>
       </div>

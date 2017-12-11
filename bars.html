@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -20,4 +20,325 @@
 
 
   </body>
+</html> -->
+
+<meta charset="utf-8">
+
+<head>
+  <style>
+
+  .bar{
+    fill: steelblue;
+  }
+
+  .bar:hover{
+    fill: brown;
+  }
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="drop" align=center></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+
+<script>
+// set the dimensions of the canvas
+var margin = {top: 100, right: 20, bottom: 70, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+
+// set the ranges
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+var y = d3.scale.linear().range([height, 0]);
+
+// define the axis
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+
+
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Price:</strong> <span style='color:red'>" + d.price + "</span>";
+  })
+
+// add the SVG element
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+svg.call(tip);
+
+
+// load the data
+// var data=[]
+
+d3.json("js/AArestaurantsmini.json", function(error, data) {
+
+  console.log(data);
+
+  data.sort(function(a, b) { return b.rating - a.rating; });
+
+  // scale the range of the data
+  x.domain(data.map(function(d) { return d.name; }));
+  y.domain([0, d3.max(data, function(d) { return d.rating; })]);
+
+  // add axis
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" )
+      .attr("class", "x-axis-text");
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 5)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("rating");
+
+
+  // Add bar chart
+  svg.selectAll("bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      // .attr("class", function(d) { return "bar "+d.price; })
+      .attr("id", function(d) { return d.price; })
+      .attr("x", function(d) { return x(d.name)+10; })
+      .attr("width", x.rangeBand()/1.2)
+      .attr("y", function(d) { return y(d.rating); })
+      .attr("height", function(d) { return height - y(d.rating); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
+
+    // var selector = d3.select("#drop")
+    //   .append("select")
+    //   .attr("id","dropdown")
+    //   .on("change", function(d){
+    //       const selection = document.getElementById("dropdown");
+    //       const strFilter = selection.options[selection.selectedIndex].text;
+    //
+    //       const filteredData = data.filter(d => d.price === strFilter);
+    //       console.log(filteredData);
+    //
+    //       y.domain([0, d3.max(filteredData, function(d){
+    //     return d["rating"];})]);
+    //
+    //       yAxis.scale(y);
+    //
+    //       d3.selectAll(".bar")
+    //           .filter(function(d) {return d["price"] === strFilter;})
+        //       .transition()
+        //       .attr("height", function(d){
+        //   return height - y(d["rating"]);
+        // })
+        // .attr("x", function(d, i){
+        //   return (width / filteredData.length) * i + 10 ;
+        // })
+        // .attr("y", function(d){
+        //   return y(d["rating"]);
+        // })
+        //       .ease("linear")
+        //       .select("title")
+        //       .text(function(d){
+        //         return d.State + " : " + d["rating"];
+        //       });
+        //
+        //     d3.selectAll("g.y.axis")
+        //       .transition()
+        //       .call(yAxis);
+         // });
+
+     var elements=["All", "$","$$","$$$","$$$$"];
+     // var selection = elements[0];
+
+     var selector = d3.select("#drop").append("select").attr("id","dropdown");
+     selector.selectAll("bar")
+       .data(elements)
+       .enter().append("option")
+       .attr("value", function(d){
+         return d;
+       })
+       .text(function(d){
+         return d;
+       })
+
+      // Get a subset of the data based on the group
+     function getFilteredData(data, filter) {
+     	return data.filter(function(d) { return d.price === filter; });
+     }
+
+     //Helper function to add new text labels
+     // function enterText(data) {
+     //   svg.selectAll(".x-axis-text")
+     //     .data(data)
+     //     .enter()
+     //     .call(xAxis)
+     //   .append("text")
+     //     .style("text-anchor", "end")
+     //     .attr("dx", "-.8em")
+     //     .attr("dy", "-.55em")
+     //     .attr("transform", "rotate(-90)" )
+     //     .attr("class", "x-axis-text");
+     // }
+
+           // Helper function to add new bars to our data
+      function enterBars(data) {
+        // Add the points!
+        svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("id", function(d) { return d.price; })
+          .attr("x", function(d) { return x(d.name)+10; })
+          .attr("width", x.rangeBand()/1.2)
+          .attr("y", function(d) { return y(d.rating); })
+          .attr("height", function(d) { return height - y(d.rating); })
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide);
+      }
+
+      function exitBars(data) {
+        svg.selectAll(".bar")
+            .data(data)
+            .exit()
+            .remove();
+      }
+
+      function updateBars(data) {
+        y.domain([0, d3.max(data, function(d){
+            return d["rating"];})]);
+
+        yAxis.scale(y);
+
+        // x.domain([0, d3.max(data, function(d){
+        //     return d["name"];})]);
+        //
+        // xAxis.scale(x);
+
+        svg.selectAll(".bar")
+            .data(data)
+            .transition()
+            .transition()
+            .attr("height", function(d){
+              return height - y(d["rating"]);
+            })
+            .attr("x", function(d, i){
+              return (width / data.length) * i + 10 ;
+            })
+            .attr("y", function(d){
+              return y(d["rating"]);
+            })
+                  .ease("linear")
+                  .select("title")
+                  .text(function(d){
+                    return d.State + " : " + d["rating"];
+                  });
+
+        d3.selectAll("g.y.axis")
+          .transition()
+          .call(yAxis);
+
+        // d3.selectAll("g.x.axis")
+        //   .transition()
+        //   .call(xAxis);
+      }
+
+      // New select element for allowing the user to select a group!
+      var $groupSelector = document.querySelector('#drop');
+      var groupData = getFilteredData(data, $groupSelector.value);
+
+      // Enter initial points filtered by default select value set in HTML
+      enterBars(groupData);
+
+
+      $groupSelector.onchange = function(e) {
+
+        var group = e.target.value;
+        if (group === "All") {
+          enterBars(data);
+          updateBars(data);
+        }
+        else {
+          var groupData = getFilteredData(data, group);
+          enterBars(groupData);
+          updateBars(groupData);
+          exitBars(groupData);
+
+          enterText(groupData);
+        }
+      };
+
+});
+
+</script>
+
+</body>
+
 </html>

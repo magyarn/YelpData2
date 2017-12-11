@@ -5,7 +5,29 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <title></title>
+    <meta charset='utf-8' />
+    <title>Draw GeoJSON points</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:100px; bottom:0; width:100%; margin: 0 auto; z-index:-10; }
+        .popup {
+          display: flex;
+        }
+        .restInfo {
+          padding-left: 15px;
+        }
+        .restImage {
+          padding-top: 5px;
+          height: 75px;
+        }
+    </style>
+
+    <script type="text/javascript" src="js/AArestaurants.js"></script>
   </head>
   <body>
     <header>
@@ -15,10 +37,255 @@
     </header>
     <div class="container">
       <section class="viz">
-        <h2>Map from Jatin</h2>
+        <div id='map'></div>
       </section>
-      
+
     </div>
+
+
+    <script>
+    // mapboxgl.accessToken = 'pk.eyJ1IjoiYXdlc3VtamF0aW4iLCJhIjoiY2phenFwZmU4MWtmbDMybzk4OTc0bXk0ZiJ9.3zCgrZdp4_g4wBnVxaZKRg';
+    L.mapbox.accessToken = 'pk.eyJ1IjoiYXdlc3VtamF0aW4iLCJhIjoiY2phenFwZmU4MWtmbDMybzk4OTc0bXk0ZiJ9.3zCgrZdp4_g4wBnVxaZKRg';
+    var map = L.mapbox.map('map', 'mapbox.light')
+        .setView([42.2808, -83.7430], 12);
+    // var map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/light-v9',
+    //     center: [-83.7430, 42.2808],
+    //     zoom: 12
+    // });
+    //
+    // lat = restaurantData.businesses[0].coordinates.latitude;
+    // lng = restaurantData.businesses[0].coordinates.longitude;
+    // theCoords = {
+    //     "type": "LineString",
+    //     "coordinates": [
+    //         [42.2803651,-83.7491532]
+    //     ]
+    // };
+     //  map.on('load', function () {
+      //  L.marker([42.2803651,-83.7491532]).addTo(map);
+      var myIcon = L.icon({
+    	iconUrl: '../images/LocationPin_1.png',
+    	iconSize: [8, 8],
+    });
+    var myIcon_2 = L.icon({
+    iconUrl: '../images/LocationPin_2.png',
+    iconSize: [10, 10],
+    });
+    var myIcon_3 = L.icon({
+    iconUrl: '../images/LocationPin_3.png',
+    iconSize: [12, 12],
+    });
+    var myIcon_4 = L.icon({
+    iconUrl: '../images/LocationPin_4.png',
+    iconSize: [12, 12],
+    });
+    var myIcon_5 = L.icon({
+    iconUrl: '../images/LocationPin_5.png',
+    iconSize: [12, 12],
+    });
+      for (var i=0; i<restaurantData.businesses.length;i++)
+      {
+        if(restaurantData.businesses[i].location.city == "Ann Arbor")
+          {
+            let marker = {};
+            let cuisine = [];
+            if(restaurantData.businesses[i].price=='$$$$')
+              {
+                restaurantData.businesses[i].categories.forEach(function(element){
+                    cuisine.push(element.title);
+                });
+                marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+                  icon: myIcon_4
+                    }).addTo(map);
+                    marker.bindPopup(`<div class="popup">
+                                        <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                        <div class="restInfo">
+                                          <h3>${restaurantData.businesses[i].name}</h3>
+                                          <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                          <p>Cuisines: ${cuisine}</p>
+                                          <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                          <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                          <a href="${restaurantData.businesses[i].url}">Website</a>
+                                        </div>
+                                      </div>`);
+                    // marker.bindPopup("<table><td><div><img style='width:50px; height:50px;object-fit: contain;'  src='"+restaurantData.businesses[i].image_url+"' ></div></td><td><div><b>"+restaurantData.businesses[i].name+"</b></div><div>"+restaurantData.businesses[i].rating+" stars ("+restaurantData.businesses[i].review_count+" reviews )</div><div>Cuisines: "+cuisine+"</div><div>Price Range: "+restaurantData.businesses[i].price+"</div> <div>Address: "+restaurantData.businesses[i].location.display_address+"</div><a href='"+restaurantData.businesses[i].url+"'>Website</a></td></table>");
+               checkRating(restaurantData.businesses[i].rating, marker);
+            }
+            else if(restaurantData.businesses[i].price=='$$$')
+              {
+                // checkRating(restaurantData.businesses[i].rating);
+                restaurantData.businesses[i].categories.forEach(function(element){
+                    cuisine.push(element.title);
+                });
+                marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+                  icon: myIcon_3
+                    }).addTo(map);
+                    marker.bindPopup(`<div class="popup">
+                                        <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                        <div class="restInfo">
+                                          <h3>${restaurantData.businesses[i].name}</h3>
+                                          <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                          <p>Cuisines: ${cuisine}</p>
+                                          <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                          <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                          <a href="${restaurantData.businesses[i].url}">Website</a>
+                                        </div>
+                                      </div>`);
+                    checkRating(restaurantData.businesses[i].rating, marker);
+            }
+            else if(restaurantData.businesses[i].price=='$$')
+              {
+                restaurantData.businesses[i].categories.forEach(function(element){
+                    cuisine.push(element.title);
+                });
+                marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+                  icon: myIcon_2
+                    }).addTo(map);
+                    marker.bindPopup(`<div class="popup">
+                                        <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                        <div class="restInfo">
+                                          <h3>${restaurantData.businesses[i].name}</h3>
+                                          <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                          <p>Cuisines: ${cuisine}</p>
+                                          <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                          <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                          <a href="${restaurantData.businesses[i].url}">Website</a>
+                                        </div>
+                                      </div>`);
+                    checkRating(restaurantData.businesses[i].rating, marker);
+            }
+            else if(restaurantData.businesses[i].price=='$')
+              {
+                restaurantData.businesses[i].categories.forEach(function(element){
+                    cuisine.push(element.title);
+                });
+                marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+                  icon: myIcon
+                    }).addTo(map);
+                    marker.bindPopup(`<div class="popup">
+                                        <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                        <div class="restInfo">
+                                          <h3>${restaurantData.businesses[i].name}</h3>
+                                          <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                          <p>Cuisines: ${cuisine}</p>
+                                          <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                          <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                          <a href="${restaurantData.businesses[i].url}">Website</a>
+                                        </div>
+                                      </div>`);
+                  checkRating(restaurantData.businesses[i].rating, marker);
+            }
+            else {
+              {
+                restaurantData.businesses[i].categories.forEach(function(element){
+                    cuisine.push(element.title);
+                });
+                marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+                  icon: myIcon_5
+                    }).addTo(map);
+                    marker.bindPopup(`<div class="popup">
+                                        <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                        <div class="restInfo">
+                                          <h3>${restaurantData.businesses[i].name}</h3>
+                                          <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                          <p>Cuisines: ${cuisine}</p>
+                                          <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                          <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                          <a href="${restaurantData.businesses[i].url}">Website</a>
+                                        </div>
+                                      </div>`);
+              checkRating(restaurantData.businesses[i].rating, marker);
+              }
+            }
+        }
+    }
+     //   map.addLayer({
+     //     "id": "route",
+     //     "type": "line",
+     //     "source": {
+     //         "type": "geojson",
+     //         "data": {
+     //             "type": "Feature",
+     //             "properties": {},
+     //             "geometry": {
+     //                 "type": "LineString",
+     //                 "coordinates": [
+     //                     [42.2803651,-83.7491532]
+     //                 ]
+     //             }
+     //         }
+     //     },
+     //     "layout": {
+     //         "line-join": "round",
+     //         "line-cap": "round"
+     //     },
+     //     "paint": {
+     //         "line-color": "#888",
+     //         "line-width": 8
+     //     }
+     // });
+    // map.addSource("route", {
+    //       "type": "geojson",
+    //       "data": {
+    //           "type": "Feature",
+    //           "properties": {},
+    //           "geometry": theCoords
+    //       }
+    //   });
+    //
+    //   map.addLayer({
+    //       "id": "route",
+    //       "type": "line",
+    //       "source": "route",
+    //       "layout": {
+    //           "line-join": "round",
+    //           "line-cap": "round"
+    //       },
+    //       "paint": {
+    //           "line-color": "#888",
+    //           "line-width": 8
+    //       }
+    //   });
+    // });
+    function checkRating(rating, marker)
+    {
+      var icon = marker.options.icon;
+      if(rating==5){
+        icon.options.iconSize[0] = 20;
+        icon.options.iconSize[1] = 20;
+    }
+    else if (rating ==4.5)
+    {
+      icon.options.iconSize[0] = 15;
+      icon.options.iconSize[1] = 15;
+    }
+    else
+    {
+      icon.options.iconSize[0] = 10;
+      icon.options.iconSize[1] = 10;
+    }
+      marker.setIcon(icon);
+    }
+    </script>
+
+    <style>
+        #fit {
+            display: block;
+            position: relative;
+            margin: 0px auto;
+            width: 50%;
+            height: 40px;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #fff;
+            background: #ee8a65;
+        }
+    </style>
 
 
   </body>
