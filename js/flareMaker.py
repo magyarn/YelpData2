@@ -32,7 +32,8 @@ for d in data["businesses"]:
                                                "children":[{"name":price,
                                                             "children":[{"name":d["name"],
                                                                         "size":1,
-                                                                        "rating":d["rating"]
+                                                                        "rating":d["rating"],
+                                                                        "review_count":d["review_count"]
                                                                         }]
                                                           }]
                                              })
@@ -42,14 +43,16 @@ for d in data["businesses"]:
                         flare2["children"][cuisines.index(cuisine)]["children"].append({"name": price,
                                                                                        "children": [{"name":d["name"],
                                                                                                     "size": 1,
-                                                                                                    "rating":d["rating"]
+                                                                                                    "rating":d["rating"],
+                                                                                                    "review_count":d["review_count"]
                                                                                                     }]
                                                                                          })
                     else:
                         flare2["children"][cuisines.index(cuisine)]["children"][records[cuisine].index(price)]["children"].append({
                                                                                                                         "name":d["name"],
                                                                                                                         "size":1,
-                                                                                                                        "rating":d["rating"]
+                                                                                                                        "rating":d["rating"],
+                                                                                                                        "review_count":d["review_count"]
                                                                                                                       })
     except KeyError:
         pass
@@ -60,6 +63,6 @@ for d in data["businesses"]:
 flare2["children"].sort(key=lambda x: len(x["children"][0]["children"]), reverse=True);
 # pprint(flare2["children"])
 
-#
-# with open('AAflare.json', 'w') as outfile:
-#     json.dump(flare2, outfile)
+
+with open('AAflare.json', 'w') as outfile:
+    json.dump(flare2, outfile)

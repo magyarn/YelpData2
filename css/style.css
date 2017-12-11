@@ -143,7 +143,7 @@ header {
   font-size: .8rem;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); }
 
-#legend, .priceLegend, .ratingLegend {
+#legend, .priceLegend, .ratingLegend, .reviewCountLegendText {
   display: flex; }
 
 #legend {
@@ -151,6 +151,8 @@ header {
   padding: 1rem;
   background-color: #f0f0f0;
   border-radius: 3px; }
+  #legend p {
+    margin-bottom: 0; }
 
 .cuisineLegend {
   margin-right: 1rem; }
@@ -180,11 +182,28 @@ header {
 #smallLength {
   height: 20px;
   width: 10px;
-  background-color: #31a354; }
+  background-color: #ff7f0f; }
 
 #largeLength {
   height: 20px;
   width: 50px;
-  background-color: #31a354; }
+  background-color: #ff7f0f; }
+
+#reviewGradient {
+  background: #ff7f0f;
+  /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(right, rgba(255, 127, 15, 0.25), #ff7f0f);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, rgba(255, 127, 15, 0.25), #ff7f0f);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, rgba(255, 127, 15, 0.25), #ff7f0f);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, rgba(255, 127, 15, 0.25), #ff7f0f);
+  /* Standard syntax */
+  height: 20px;
+  width: 160px; }
+
+.reviewCountLegendText {
+  justify-content: space-between; }
 
 /*# sourceMappingURL=style.css.map */

@@ -85,22 +85,39 @@ d3.json("js/AAflare.json", function(error, root) {
         }
       }
       else if (d.depth === 3){
-        if (d.parent.name === "$") {
-          return "#31a354"
-        }
-        else if (d.parent.name === "$$") {
-          return "#78c769"
-        }
-        else if (d.parent.name === "$$$") {
-          return "#c2e699"
-        }
-        else if (d.parent.name === "$$$$") {
-          return "#f7fcb9"
-        }
+        return "#ff7f0f";
+        // if (d.parent.name === "$") {
+        //   return "#31a354"
+        // }
+        // else if (d.parent.name === "$$") {
+        //   return "#78c769"
+        // }
+        // else if (d.parent.name === "$$$") {
+        //   return "#c2e699"
+        // }
+        // else if (d.parent.name === "$$$$") {
+        //   return "#f7fcb9"
+        // }
       }
 
       }
     )
+      .style("opacity", function(d) {
+        if (d.depth === 3) {
+          if (d.review_count < 25) {
+            return .25;
+          }
+          else if (d.review_count >= 25 && d.review_count < 50) {
+            return .5;
+          }
+          else if (d.review_count >= 50 && d.review_count < 75) {
+            return .75;
+          }
+          else {
+            return 1;
+          }
+        }
+      })
       .style({"stroke": "black", "stroke-width": .5})
       .on("click", click)
       .on("mouseover", function(d) {
@@ -142,7 +159,7 @@ d3.json("js/AAflare.json", function(error, root) {
             cuisineTag.innerHTML = d.parent.parent.name;
             priceTag.innerHTML = d.parent.name;
             restaurantTag.innerHTML = d.name;
-            ratingTag.innerHTML = d.rating;
+            ratingTag.innerHTML = `${d.rating} stars based on ${d.review_count} reviews`;
             cuisineTag.className = "burstTag";
             priceTag.className = "burstTag";
             restaurantTag.className = "burstTag";
@@ -151,35 +168,52 @@ d3.json("js/AAflare.json", function(error, root) {
 
             if (d.parent.name === "$") {
               priceTag.style.backgroundColor = "#31a354";
-              restaurantTag.style.backgroundColor = "#31a354";
-              ratingTag.style.backgroundColor = "#31a354";
+              restaurantTag.style.border = "1px solid black";
+              ratingTag.style.backgroundColor = "#ff7f0f";
               priceTag.style.color = "#ffffff";
-              restaurantTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#000000";
+              restaurantTag.style.backgroundColor = "#ffffff";
               ratingTag.style.color = "#ffffff";
             }
             else if (d.parent.name === "$$") {
               priceTag.style.backgroundColor = "#78c769";
-              restaurantTag.style.backgroundColor = "#78c769";
-              ratingTag.style.backgroundColor = "#78c769";
+              restaurantTag.style.border = "1px solid black";
+              ratingTag.style.backgroundColor = "#ff7f0f";
               priceTag.style.color = "#ffffff";
-              restaurantTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#000000";
+              restaurantTag.style.backgroundColor = "#ffffff";
               ratingTag.style.color = "#ffffff";
             }
             else if (d.parent.name === "$$$") {
               priceTag.style.backgroundColor = "#c2e699";
-              restaurantTag.style.backgroundColor = "#c2e699";
-              ratingTag.style.backgroundColor = "#c2e699";
+              restaurantTag.style.border = "1px solid black";
+              ratingTag.style.backgroundColor = "#ff7f0f";
               priceTag.style.color = "#ffffff";
-              restaurantTag.style.color = "#ffffff";
+              restaurantTag.style.color = "#000000";
+              restaurantTag.style.backgroundColor = "#ffffff";
               ratingTag.style.color = "#ffffff";
             }
             else if (d.parent.name === "$$$$") {
               priceTag.style.backgroundColor = "#f7fcb9";
-              restaurantTag.style.backgroundColor = "#f7fcb9";
-              ratingTag.style.backgroundColor = "#f7fcb9";
+              restaurantTag.style.border = "1px solid black";
+              restaurantTag.style.backgroundColor = "#ffffff";
+              ratingTag.style.backgroundColor = "#ff7f0f";
               priceTag.style.color = "#000000";
               restaurantTag.style.color = "#000000";
               ratingTag.style.color = "#000000";
+            }
+
+            if (d.review_count < 25) {
+              ratingTag.style.backgroundColor = "rgba(255, 127, 15, .25)";
+            }
+            else if (d.review_count >= 25 && d.review_count < 50) {
+              ratingTag.style.backgroundColor = "rgba(255, 127, 15, .5)";
+            }
+            else if (d.review_count >= 50 && d.review_count < 75) {
+              ratingTag.style.backgroundColor = "rgba(255, 127, 15, .75)";
+            }
+            else {
+              ratingTag.style.backgroundColor = "rgba(255, 127, 15, 1)";
             }
 
 
@@ -221,6 +255,7 @@ d3.json("js/AAflare.json", function(error, root) {
           cuisineTag.innerHTML = '';
           priceTag.innerHTML = '';
           restaurantTag.innerHTML = '';
+          restaurantTag.style.border = '';
           ratingTag.innerHTML = '';
           cuisineTag.classList.remove("burstTag");
           priceTag.classList.remove("burstTag");

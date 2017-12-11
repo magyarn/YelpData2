@@ -24,7 +24,11 @@
           indicating a greater quantity of restaurants in that cuisine category.
           At the next level out, each cuisine is broken up by price, from low ($)
           to high ($$$$). The outermost ring is comprised of individual restaurants
-          within that cuisine and price range. Hover over, or click on, a section to see more detail and learn more about
+          within that cuisine and price range. The length (radius) of the restaurant segment
+          indicates the rating, with higher ratings corresponding to greater lengths. The opacity
+          of the restaurant segment reflects the number of reviews that have contributed
+          to that rating (fewer reviews is reflected by a more faded color).
+          Hover over, or click on, a section to see more detail and learn more about
           it.
         </p>
         <div id="legend">
@@ -58,6 +62,13 @@
             <div id="fourStars" class="priceThing">
               <div id="largeLength"></div>
               <p>5 Stars</p>
+            </div>
+          </div>
+          <div class="reviewCountLegend">
+            <div id="reviewGradient" class="priceThing"></div>
+            <div class="priceThing reviewCountLegendText">
+              <p><25</p>
+              <p>>75 reviews</p>
             </div>
           </div>
         </div>
