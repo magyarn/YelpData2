@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A2eatZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/barchartjs.js"></script>
+    <style>
+    .dashed{
+       stroke-dasharray: 5,5;
+      }
+    </style>
+</head>
+<body>
+  <header>
+    <a href="burst.html">PREVIOUS</a>
+    <div>
+      <h1>A2eatZ</h1>
+      <p>By: Nathan Magyar, Jatin Gupta, Ru Jia, and Sanmeet Jasuja</p>
+    </div>
+    <a href="index.html">FINISH</a>
+  </header>
+  <div class="container">
+    <select name="cuisines" id="cuisines" style="margin-bottom: 1rem">
+      <option value="all">All</option>
+    </select>
+    <div id="chart"></div>
+    <div>
+      <svg width="200" height="300">
+      <rect x='30' y='10' width="20" height="20" style="fill:rgb(0,109,44);"></rect>
+      <rect x='30' y='40' width="20" height="20" style="fill:rgb(44,162,95);"></rect>
+      <rect x='30' y='70' width="20" height="20" style="fill:rgb(102,194,164);"></rect>
+      <rect x='30' y='100' width="20" height="20" style="fill:rgb(178,226,226);"></rect>
+      <rect x='30' y='130' width="20" height="20" style="fill:rgb(237, 248, 251);"></rect>
+
+      <text x="60" y='30' fill="black">undefined</text>
+      <text x="60" y='60' fill="black">$</text>
+      <text x="60" y='90' fill="black">$$</text>
+      <text x="60" y='120' fill="black">$$$</text>
+      <text x="60" y='150' fill="black">$$$$</text>
+
+
+
+  </svg>
+    </div>
+  </div>
+
+</body>
+</html>

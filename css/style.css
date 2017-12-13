@@ -40,10 +40,12 @@ header {
       color: #2794E5;
       background-color: white;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3); }
+    header a div {
+      text-align: center; }
 
 .container {
   width: 75%;
-  margin: 0 auto; }
+  margin: 3rem auto 0; }
 
 .flex-center, .cities {
   display: flex;
@@ -94,14 +96,15 @@ header {
     text-decoration: none;
     transition: color 2s; }
   .city-img.annarbor {
-    background-image: url("../images/map.jpg");
+    background-image: url("../images/mapGraphic.png");
     background-size: cover; }
   .city-img.lansing {
-    background-image: url("../images/pie.png");
+    background-image: url("../images/burstGraphic.png");
     background-size: cover; }
   .city-img.kalamazoo {
-    background-image: url("../images/kalamazoo.jpeg");
-    background-size: cover; }
+    background-image: url("../images/barGraphic.png");
+    background-size: cover;
+    border: 1px solid #f0f0f0; }
   .city-img:hover {
     cursor: pointer; }
     .city-img:hover a {
@@ -131,7 +134,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 1rem; }
+  margin-right: 1rem;
+  font-size: .8rem; }
 
 .burstTooltip {
   width: 150px;
@@ -205,5 +209,9 @@ header {
 
 .reviewCountLegendText {
   justify-content: space-between; }
+
+#cuisineTag {
+  flex-direction: column;
+  justify-content: center; }
 
 /*# sourceMappingURL=style.css.map */

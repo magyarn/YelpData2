@@ -17,7 +17,6 @@ flare2 = {"name":"Ann Arbor Restaurants",
 
 
 for d in data["businesses"]:
-    pprint(d)
     rating = d["rating"]
     review_count = d["review_count"]
     try:
@@ -29,6 +28,9 @@ for d in data["businesses"]:
                     cuisines.append(cuisine)
                     records[cuisine] = [price]
                     flare2["children"].append({"name": cuisine,
+                                               "allRatings":[d["rating"]],
+                                               "averageRating":0,
+                                               "numReviews":d["review_count"],
                                                "children":[{"name":price,
                                                             "children":[{"name":d["name"],
                                                                         "size":1,
@@ -47,6 +49,8 @@ for d in data["businesses"]:
                                                                                                     "review_count":d["review_count"]
                                                                                                     }]
                                                                                          })
+                        flare2["children"][cuisines.index(cuisine)]["allRatings"].append(d["rating"])
+                        flare2["children"][cuisines.index(cuisine)]["numReviews"] += d["review_count"];
                     else:
                         flare2["children"][cuisines.index(cuisine)]["children"][records[cuisine].index(price)]["children"].append({
                                                                                                                         "name":d["name"],
@@ -54,14 +58,22 @@ for d in data["businesses"]:
                                                                                                                         "rating":d["rating"],
                                                                                                                         "review_count":d["review_count"]
                                                                                                                       })
+                        flare2["children"][cuisines.index(cuisine)]["allRatings"].append(d["rating"])
+                        flare2["children"][cuisines.index(cuisine)]["numReviews"] += d["review_count"];
     except KeyError:
         pass
 
 
 
 
-flare2["children"].sort(key=lambda x: len(x["children"][0]["children"]), reverse=True);
-# pprint(flare2["children"])
+flare2["children"].sort(key=lambda x: len(x["children"][0]["children"]), reverse=True)
+for category in flare2["children"]:
+    total = 0;
+    for num in category["allRatings"]:
+        total += num
+    average = total / len(category["allRatings"])
+    category["averageRating"] = round(average, 1)
+pprint(flare2["children"])
 
 
 with open('AAflare.json', 'w') as outfile:

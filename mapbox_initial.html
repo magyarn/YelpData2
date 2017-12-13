@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>A2eatZ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:150; bottom:0; width:100%; z-index: -10;}
+
+        .popup {
+          display: flex;
+        }
+
+        .restInfo {
+          padding-left: 15px;
+        }
+
+        .restImage {
+          padding-top: 5px;
+
+          height: 75px;
+        }
+    </style>
+
+    <script type="text/javascript" src="restaurants.js"></script>
+</head>
+<body>
+  <header>
+    <a href="index.html">PREVIOUS</a>
+    <div>
+      <h1>A2eatZ</h1>
+      <p>By: Nathan Magyar, Jatin Gupta, Ru Jia, and Sanmeet Jasuja</p>
+    </div>
+    <a href="burst.html">NEXT</a>
+  </header>
+  <!-- <div class="container"> -->
+    <!-- <section class="viz">
+      <div id='map'></div>
+    </section> -->
+    <h1>Get a lay of the land</h1>
+    <p>Explore the map below to get a sense of where restaurants of various price
+      ranges (color) and rating level (size) are located, thus informing you of where you might want to start your
+      business. Click on an individual dot to learn about that restaurant.
+    </p>
+    <div style="margin-top:5rem">
+      <span>
+        <svg width="250" height="400">
+        <text x="30" y='20' fill="black">Price Range</text>
+
+        <rect x='30' y='40' width="20" height="20" style="fill:rgb(237, 248, 251);"></rect>
+        <rect x='30' y='70' width="20" height="20" style="fill:rgb(178,226,226);"></rect>
+        <rect x='30' y='100' width="20" height="20" style="fill:rgb(102,194,164);"></rect>
+        <rect x='30' y='130' width="20" height="20" style="fill:rgb(44,162,95);"></rect>
+        <rect x='30' y='160' width="20" height="20" style="fill:rgb(0,109,44);"></rect>
+
+        <text x="60" y='60' fill="black">undefined</text>
+        <text x="60" y='90' fill="black">$</text>
+        <text x="60" y='120' fill="black">$$</text>
+        <text x="60" y='150' fill="black">$$$</text>
+        <text x="60" y='180' fill="black">$$$$</text>
+
+        <text x="30" y='300' fill="black">Circle Size (bigger):</text>
+        <text x="30" y='320' fill="black">High rating</text>
+
+        <text x="30" y='360' fill="black">Circle Size (smaller):</text>
+        <text x="30" y='380' fill="black">Low rating</text>
+
+        </svg>
+
+
+      </span>
+    <span id='map'></span>
+  </div>
+<!-- </div> -->
+<script>
+// mapboxgl.accessToken = 'pk.eyJ1IjoiYXdlc3VtamF0aW4iLCJhIjoiY2phenFwZmU4MWtmbDMybzk4OTc0bXk0ZiJ9.3zCgrZdp4_g4wBnVxaZKRg';
+L.mapbox.accessToken = 'pk.eyJ1IjoiYXdlc3VtamF0aW4iLCJhIjoiY2phenFwZmU4MWtmbDMybzk4OTc0bXk0ZiJ9.3zCgrZdp4_g4wBnVxaZKRg';
+var map = L.mapbox.map('map', 'mapbox.dark')
+    .setView([42.2808, -83.7430], 12);
+// var map = new mapboxgl.Map({
+//     container: 'map',
+//     style: 'mapbox://styles/mapbox/light-v9',
+//     center: [-83.7430, 42.2808],
+//     zoom: 12
+// });
+//
+// lat = restaurantData.businesses[0].coordinates.latitude;
+// lng = restaurantData.businesses[0].coordinates.longitude;
+
+// theCoords = {
+//     "type": "LineString",
+//     "coordinates": [
+//         [42.2803651,-83.7491532]
+//     ]
+// };
+
+ //  map.on('load', function () {
+  //  L.marker([42.2803651,-83.7491532]).addTo(map);
+  var myIcon = L.icon({
+	iconUrl: 'LocationPin_1.png',
+	iconSize: [8, 8],
+});
+
+var myIcon_2 = L.icon({
+iconUrl: 'LocationPin_2.png',
+iconSize: [10, 10],
+});
+
+var myIcon_3 = L.icon({
+iconUrl: 'LocationPin_3.png',
+iconSize: [12, 12],
+});
+
+var myIcon_4 = L.icon({
+iconUrl: 'LocationPin_4.png',
+iconSize: [12, 12],
+});
+
+var myIcon_5 = L.icon({
+iconUrl: 'LocationPin_5.png',
+iconSize: [12, 12],
+});
+
+  for (var i=0; i<restaurantData.businesses.length;i++)
+  {
+    if(restaurantData.businesses[i].location.city == "Ann Arbor")
+      {
+        let marker = {};
+        let cuisine = [];
+        if(restaurantData.businesses[i].price=='$$$$')
+          {
+
+            restaurantData.businesses[i].categories.forEach(function(element){
+                cuisine.push(element.title);
+            });
+            marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+              icon: myIcon_4
+                }).addTo(map);
+
+                marker.bindPopup(`<div class="popup">
+                                    <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                    <div class="restInfo">
+                                      <h3>${restaurantData.businesses[i].name}</h3>
+                                      <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                      <p>Cuisines: ${cuisine}</p>
+                                      <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                      <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                      <a href="${restaurantData.businesses[i].url}">Website</a>
+                                    </div>
+                                  </div>`);
+
+                // marker.bindPopup("<table><td><div><img style='width:50px; height:50px;object-fit: contain;'  src='"+restaurantData.businesses[i].image_url+"' ></div></td><td><div><b>"+restaurantData.businesses[i].name+"</b></div><div>"+restaurantData.businesses[i].rating+" stars ("+restaurantData.businesses[i].review_count+" reviews )</div><div>Cuisines: "+cuisine+"</div><div>Price Range: "+restaurantData.businesses[i].price+"</div> <div>Address: "+restaurantData.businesses[i].location.display_address+"</div><a href='"+restaurantData.businesses[i].url+"'>Website</a></td></table>");
+
+           checkRating(restaurantData.businesses[i].rating, marker);
+        }
+
+        else if(restaurantData.businesses[i].price=='$$$')
+          {
+            // checkRating(restaurantData.businesses[i].rating);
+            restaurantData.businesses[i].categories.forEach(function(element){
+                cuisine.push(element.title);
+            });
+            marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+              icon: myIcon_3
+                }).addTo(map);
+
+                marker.bindPopup(`<div class="popup">
+                                    <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                    <div class="restInfo">
+                                      <h3>${restaurantData.businesses[i].name}</h3>
+                                      <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                      <p>Cuisines: ${cuisine}</p>
+                                      <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                      <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                      <a href="${restaurantData.businesses[i].url}">Website</a>
+                                    </div>
+                                  </div>`);
+
+
+                checkRating(restaurantData.businesses[i].rating, marker);
+        }
+        else if(restaurantData.businesses[i].price=='$$')
+          {
+
+            restaurantData.businesses[i].categories.forEach(function(element){
+                cuisine.push(element.title);
+            });
+            marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+              icon: myIcon_2
+                }).addTo(map);
+
+                marker.bindPopup(`<div class="popup">
+                                    <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                    <div class="restInfo">
+                                      <h3>${restaurantData.businesses[i].name}</h3>
+                                      <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                      <p>Cuisines: ${cuisine}</p>
+                                      <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                      <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                      <a href="${restaurantData.businesses[i].url}">Website</a>
+                                    </div>
+                                  </div>`);
+
+                checkRating(restaurantData.businesses[i].rating, marker);
+        }
+        else if(restaurantData.businesses[i].price=='$')
+          {
+            restaurantData.businesses[i].categories.forEach(function(element){
+                cuisine.push(element.title);
+            });
+            marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+              icon: myIcon
+                }).addTo(map);
+
+                marker.bindPopup(`<div class="popup">
+                                    <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                    <div class="restInfo">
+                                      <h3>${restaurantData.businesses[i].name}</h3>
+                                      <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                      <p>Cuisines: ${cuisine}</p>
+                                      <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                      <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                      <a href="${restaurantData.businesses[i].url}">Website</a>
+                                    </div>
+                                  </div>`);
+
+              checkRating(restaurantData.businesses[i].rating, marker);
+        }
+        else {
+          {
+            restaurantData.businesses[i].categories.forEach(function(element){
+                cuisine.push(element.title);
+            });
+            marker = L.marker(new L.LatLng(restaurantData.businesses[i].coordinates.latitude,restaurantData.businesses[i].coordinates.longitude), {
+              icon: myIcon_5
+                }).addTo(map);
+
+                marker.bindPopup(`<div class="popup">
+                                    <img class="restImage" style="width: 75px !important;" src='${restaurantData.businesses[i].image_url}' alt="" />
+                                    <div class="restInfo">
+                                      <h3>${restaurantData.businesses[i].name}</h3>
+                                      <p>Rating:  ${restaurantData.businesses[i].rating} stars</p>
+                                      <p>Cuisines: ${cuisine}</p>
+                                      <p>Price Range: ${restaurantData.businesses[i].price}</p>
+                                      <p>Address: ${restaurantData.businesses[i].location.display_address}</p>
+                                      <a href="${restaurantData.businesses[i].url}">Website</a>
+                                    </div>
+                                  </div>`);
+
+          checkRating(restaurantData.businesses[i].rating, marker);
+          }
+        }
+    }
+}
+
+
+function checkRating(rating, marker)
+{
+  var icon = marker.options.icon;
+  if(rating==5){
+    icon.options.iconSize[0] = 20;
+    icon.options.iconSize[1] = 20;
+}
+else if (rating ==4.5)
+{
+  icon.options.iconSize[0] = 15;
+  icon.options.iconSize[1] = 15;
+}
+else
+{
+  icon.options.iconSize[0] = 10;
+  icon.options.iconSize[1] = 10;
+}
+  marker.setIcon(icon);
+}
+</script>
+
+<style>
+    #fit {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 50%;
+        height: 40px;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #fff;
+        background: #ee8a65;
+    }
+</style>
+
+<style>
+       body { margin:0; padding:0; }
+       #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</body>
+</html>

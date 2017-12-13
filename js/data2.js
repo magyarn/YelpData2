@@ -37,7 +37,7 @@ var arc = d3.svg.arc()
       return radius * (d.y + d.dy)*(d.y + d.dy);
       }
     else if (d.depth === 3) {
-      return radius * (d.y + (d.rating/50) + .01)*(d.y + (d.rating/50) + .01);
+      return radius * (d.y + (d.rating/50) + .01)*(d.y + (d.rating/50) - .02);
     }}
     );
 
@@ -61,6 +61,7 @@ d3.json("js/AAflare.json", function(error, root) {
   if (error) throw error;
 
   let colorSwitch = 0;
+
 
   svg.selectAll("path")
       .data(partition.nodes(root))
@@ -126,7 +127,7 @@ d3.json("js/AAflare.json", function(error, root) {
           if (d.depth === 2) {
             var cuisineTag = document.getElementById("cuisineTag");
             var priceTag = document.getElementById("priceTag");
-            cuisineTag.innerHTML = d.parent.name;
+            cuisineTag.innerHTML = `${d.parent.name} <p>${d.parent.averageRating} stars based on ${d.parent.numReviews} reviews</p>`;
             priceTag.innerHTML = d.name;
             cuisineTag.classList.add("burstTag");
             priceTag.classList.add("burstTag");
@@ -156,7 +157,7 @@ d3.json("js/AAflare.json", function(error, root) {
             var priceTag = document.getElementById("priceTag");
             var restaurantTag = document.getElementById("restaurantTag");
             var ratingTag = document.getElementById("ratingTag");
-            cuisineTag.innerHTML = d.parent.parent.name;
+            cuisineTag.innerHTML = `${d.parent.parent.name} <p>${d.parent.parent.averageRating} stars based on ${d.parent.parent.numReviews} reviews</p>`;
             priceTag.innerHTML = d.parent.name;
             restaurantTag.innerHTML = d.name;
             ratingTag.innerHTML = `${d.rating} stars based on ${d.review_count} reviews`;
@@ -220,7 +221,7 @@ d3.json("js/AAflare.json", function(error, root) {
           }
           else if (d.depth === 1) {
             var cuisineTag = document.getElementById("cuisineTag");
-            cuisineTag.innerHTML = d.name;
+            cuisineTag.innerHTML = `${d.name} <p>${d.averageRating} stars based on ${d.numReviews} reviews</p>`;
             cuisineTag.className = "burstTag";
             tooltip.html(name)
 
@@ -264,6 +265,46 @@ d3.json("js/AAflare.json", function(error, root) {
           return tooltip.style("display", "none");
         });
 
+        svg.append("circle")
+          .attr("cx", 0)
+          .attr("cy", 0)
+          .attr("r", 175)
+          .style("fill", "none")
+          .style({"stroke": "black", "stroke-width": .5})
+          .style("opacity", .5);
+
+        svg.append("circle")
+          .attr("cx", 0)
+          .attr("cy", 0)
+          .attr("r", 185)
+          .style("fill", "none")
+          .style({"stroke": "black", "stroke-width": .5})
+          .style("opacity", .5);
+
+        svg.append("circle")
+          .attr("cx", 0)
+          .attr("cy", 0)
+          .attr("r", 195)
+          .style("fill", "none")
+          .style({"stroke": "black", "stroke-width": .5})
+          .style("opacity", .5);
+
+        svg.append("circle")
+          .attr("cx", 0)
+          .attr("cy", 0)
+          .attr("r", 205)
+          .style("fill", "none")
+          .style({"stroke": "black", "stroke-width": .5})
+          .style("opacity", .5);
+
+          svg.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 215)
+            .style("fill", "none")
+            .style({"stroke": "black", "stroke-width": .5})
+            .style("opacity", .5);
+
 });
 
 
@@ -298,6 +339,7 @@ function click(d) {
       })
     .selectAll("path")
       .attrTween("d", function(d) { return function() { return arc(d); }; })
+
 
 }
 
